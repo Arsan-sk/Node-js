@@ -1,0 +1,148 @@
+// ...existing code...
+Event Loop in Node js :
+    Overview
+    - The event loop is Node's mechanism to handle asynchronous operations on a single thread.
+    - It repeatedly processes queues (phases) so callbacks, timers, I/O and other tasks run without blocking the main thread.
+    - Key phases (simplified): timers -> pending callbacks -> idle/prepare -> poll -> check -> close. Microtasks (process.nextTick, Promise callbacks) run between phases and have priority.
+
+    Important concepts
+    - Timers: callbacks scheduled by setTimeout/setInterval.
+    - I/O callbacks: results from non-blocking I/O (fs, network).
+    - Check: callbacks scheduled by setImmediate.
+    - Microtasks: process.nextTick and Promise reactions; run immediately after the current operation before the next event-loop phase.
+    - Blocking the thread (CPU-bound work) prevents the loop from processing queued callbacks.
+
+    Examples and different cases
+
+    1) nextTick vs Promise.then vs setTimeout vs setImmediate
+        Code:
+            console.log('start');
+            setTimeout(() => console.log('timeout'), 0);
+            setImmediate(() => console.log('immediate'));
+            process.nextTick(() => console.log('nextTick'));
+            Promise.resolve().then(() => console.log('promise'));
+            console.log('end');
+
+        What happens (typical):
+            start
+            end
+            nextTick        <-- process.nextTick runs before Promises
+            promise         <-- microtask queue (Promise reactions)
+            timeout         <-- timers phase
+            immediate       <-- check phase
+
+        Note:
+            - setImmediate vs setTimeout(0) order can change when code is inside an I/O callback.
+            - process.nextTick always runs before other microtasks and delays event-loop progress if used repeatedly.
+
+    2) setImmediate vs setTimeout inside an I/O callback
+        Code:
+            const fs = require('fs');
+            fs.readFile(__filename, () => {
+              setTimeout(() => console.log('timeout'), 0);
+              setImmediate(() => console.log('immediate'));
+            });
+
+        What happens:
+            - When inside an I/O callback, setImmediate callbacks are usually executed before timers scheduled with setTimeout(0).
+            - This demonstrates that the event loop has different behavior when coming from the poll phase.
+
+    3) Blocking the event loop
+        Code:
+            console.log('start blocking');
+            const start = Date.now();
+            while (Date.now() - start < 2000) {} // busy loop 2s
+            console.log('end blocking');
+
+            setTimeout(() => console.log('after timeout'), 0);
+
+        What happens:
+            - The busy loop blocks the only thread; timers and I/O callbacks cannot run until the loop is free.
+            - after timeout will only execute after the blocking code finishes (~2s delay).
+
+    Practical tip
+    - Keep CPU-heavy tasks off the event loop: use worker_threads, child processes, or native addons for heavy computation.
+    - Use process.nextTick sparingly; it can starve of the event loop if abused.
+
+...existing code...
+Async Functionality of Node js:
+    Overview
+    - Node provides multiple async styles: callbacks, Promises, async/await.
+    - Asynchronous I/O is non-blocking: Node starts the operation and continues; a callback/Promise resolves later.
+
+    Patterns with examples
+
+    1) Callback-style (classic)
+        const fs = require('fs');
+        fs.readFile('file.txt', 'utf8', (err, data) => {
+          if (err) {
+            console.error('read error', err);
+            return;
+          }
+          console.log('file contents', data);
+        });
+
+        - Good for simple quick tasks, but nesting many callbacks leads to "callback hell".
+        - Errors are handled via the first err argument.
+
+    2) Promises
+        const fs = require('fs').promises;
+        fs.readFile('file.txt', 'utf8')
+          .then(data => console.log('file contents', data))
+          .catch(err => console.error('read error', err));
+
+        - Promises give clearer chaining and better error propagation.
+
+    3) async / await (syntactic sugar over Promises)
+        async function read() {
+          try {
+            const fs = require('fs').promises;
+            const data = await fs.readFile('file.txt', 'utf8');
+            console.log('file contents', data);
+          } catch (err) {
+            console.error('read error', err);
+          }
+        }
+        read();
+
+        - Makes async code look synchronous; use try/catch for errors.
+
+    4) Parallel vs sequential operations
+        // sequential
+        await doA();
+        await doB(); // doB waits for doA
+
+        // parallel
+        await Promise.all([doA(), doB()]); // both run concurrently
+
+        - Use Promise.all for concurrent independent tasks; be aware that one rejection rejects the whole Promise.all.
+
+    5) Error cases
+        - Unhandled Promise rejection: if a Promise rejects and is not handled, Node may warn or terminate depending on settings.
+        - Throwing inside an async function results in a rejected Promise; handle with try/catch or .catch().
+
+    6) sync vs async API effects
+        Example:
+            const fs = require('fs');
+            const data = fs.readFileSync('file.txt', 'utf8'); // blocking
+            console.log('sync', data);
+
+            fs.readFile('file.txt', 'utf8', (err, data) => { // non-blocking
+              console.log('async', data);
+            });
+
+        - readFileSync blocks the event loop while reading; readFile does not.
+
+    Practical tips
+    - Prefer Promise-based APIs and async/await for clarity.
+    - Use concurrency patterns (Promise.all, Promise.race) when appropriate.
+    - Convert callback APIs to Promises with util.promisify when needed.
+    - Handle errors explicitly to avoid unhandled rejections.
+
+    Quick reference for ordering and priority
+    - process.nextTick() -> runs immediately after the current operation, before Promise.then.
+    - Promise.resolve().then(...) -> microtask, runs after nextTick but before other event loop phases.
+    - setTimeout(..., 0) -> timers phase.
+    - setImmediate(...) -> check phase (often after I/O).
+
+// ...existing code...
