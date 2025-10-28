@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Home</title>
+        <link rel="stylesheet" href="/output.css">
+
+</head>
+
+<body class="min-h-screen bg-gradient-to-b from-red-50 to-gray-50 flex flex-col">
+    <header class="bg-red-600 text-white shadow-lg px-6 py-5">
+        <h1 class="text-3xl font-extrabold text-center tracking-tight drop-shadow-sm">Add your home</h1>
+    </header>
+
+    <main class="flex-1 flex items-center justify-center p-8">
+        <form action="/host/add-home" method="POST"
+              class="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 space-y-5 border border-gray-100 transition-transform duration-300 hover:shadow-xl hover:-translate-y-1"
+              novalidate>
+            
+            <input id="title" type="text" name="title" placeholder="Title" required
+                   class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-300 focus:border-red-400 transition-all duration-200">
+
+            <input id="description" type="text" name="description" placeholder="Description" required
+                   class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-300 focus:border-red-400 transition-all duration-200">
+
+            <input id="price" type="number" name="price" placeholder="Price Per Night" required
+                   class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-300 focus:border-red-400 transition-all duration-200">
+
+            <input type="submit" value="Add Home"
+                   class="w-full bg-red-600 text-white font-semibold px-5 py-3 rounded-lg shadow-md hover:bg-red-700 hover:shadow-lg cursor-pointer transition-all duration-300 transform hover:-translate-y-0.5">
+        </form>
+    </main>
+
+    <footer class="text-center py-5 text-sm text-gray-600 border-t border-gray-200 bg-white/60 backdrop-blur-sm">
+        <a href="/" class="font-medium text-red-600 hover:underline transition-colors">Go to Home</a>
+    </footer>
+</body>
+
+</html>

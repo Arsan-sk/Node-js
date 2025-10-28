@@ -1,207 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Home</title>
-    <style>
-        :root{
-            --bg: #ffffff;
-            --page-bg: #fbfbfc;
-            --card-bg: #ffffff;
-            --accent: #ff5a5f; /* Airbnb-like orange */
-            --accent-2: #ff8b66;
-            --muted: #6b7280;
-            --radius: 12px;
-            --pad: 20px;
-            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-        }
 
-        html,body{
-            height:100%;
-            margin:0;
-            background: linear-gradient(180deg,var(--page-bg), #ffffff);
-            color:#0f1724;
-            -webkit-font-smoothing:antialiased;
-            -moz-osx-font-smoothing:grayscale;
-            animation: pageFade 420ms ease both;
-        }
-
-        .site-header{
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            padding:20px;
-            background: #fff;
-            border-bottom: 1px solid rgba(15,23,36,0.04);
-            animation: floatIn 600ms ease both;
-        }
-        .site-header h1{
-            margin:0;
-            font-size:1.4rem;
-            color: var(--accent);
-            font-weight:700;
-        }
-
-        .container{
-            max-width:900px;
-            margin:28px auto;
-            padding: 0 20px;
-        }
-
-        .card{
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: var(--pad);
-            box-shadow: 0 8px 30px rgba(16,24,40,0.06);
-            display:flex;
-            flex-direction:column;
-            gap:16px;
-            animation: cardPop 420ms cubic-bezier(.2,.9,.2,1) both;
-        }
-
-        form.row{
-            display:grid;
-            grid-template-columns: 1fr 1fr;
-            gap:12px;
-        }
-
-        label{
-            color:var(--muted);
-            font-size:0.9rem;
-            display:block;
-            margin-bottom:6px;
-        }
-
-        input[type="text"],
-        input[type="number"],
-        select,
-        textarea{
-            width:100%;
-            padding:10px 12px;
-            border-radius:10px;
-            border:1px solid rgba(15,23,36,0.08);
-            background: #fff;
-            color: #0f1724;
-            outline:none;
-            transition:box-shadow 180ms ease, border-color 180ms ease, transform 120ms ease;
-            font-size:0.95rem;
-        }
-
-        input:focus, select:focus, textarea:focus{
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(255,90,95,0.08);
-            border-color: rgba(255,90,95,0.6);
-        }
-
-        .muted-note{
-            color: var(--muted);
-            font-size:0.86rem;
-        }
-
-        .actions{
-            display:flex;
-            justify-content:flex-end;
-            gap:12px;
-            align-items:center;
-        }
-
-        .btn{
-            display:inline-block;
-            padding:10px 16px;
-            border-radius:10px;
-            border: none;
-            cursor:pointer;
-            background: linear-gradient(90deg,var(--accent), var(--accent-2));
-            color:white;
-            font-weight:600;
-            box-shadow: 0 8px 26px rgba(255,90,95,0.12);
-            transition:transform 160ms ease, box-shadow 160ms ease;
-        }
-        .btn:hover{
-            transform: translateY(-3px);
-            box-shadow: 0 18px 46px rgba(255,90,95,0.14);
-        }
-
-        footer.site-footer{
-            display:flex;
-            justify-content:center;
-            padding:18px 0 40px;
-            color: var(--muted);
-            font-size:0.95rem;
-            opacity:0.95;
-        }
-        footer.site-footer a{
-            color: var(--accent);
-            text-decoration:none;
-            padding:6px 10px;
-            border-radius:8px;
-            transition: background 160ms ease, transform 160ms ease;
-        }
-        footer.site-footer a:hover{
-            transform: translateY(-3px);
-        }
-
-        @media (max-width:720px){
-            form.row{ grid-template-columns: 1fr; }
-            .container{ margin:16px auto; }
-        }
-
-        /* Animations */
-        @keyframes pageFade {
-            from{ opacity:0; transform: translateY(6px) }
-            to{ opacity:1; transform:none; }
-        }
-        @keyframes floatIn{
-            from{ transform: translateY(-6px); opacity:0; }
-            to{ transform:none; opacity:1; }
-        }
-        @keyframes cardPop{
-            from{ transform: translateY(10px) scale(.998); opacity:0 }
-            to{ transform:none; opacity:1 }
-        }
-    </style>
 </head>
+
 <body>
     <header class="site-header">
         <h1>Add your home</h1>
     </header>
-    <main class="container">
-        <div class="card">
-            <form action='/host/add-home' method='POST' class="row" novalidate>
-                <div style="grid-column: 1 / -1;">
-                    <label for="title">Title</label>
-                    <input id="title" type='text' name='title' placeholder='Beautiful seaside cottage' required>
-                </div>
-
-                <div style="grid-column: 1 / -1;">
-                    <label for="description">Description</label>
-                    <input id="description" type='text' name='description' placeholder='Short description of the property' required>
-                </div>
-
-                <div>
-                    <label for="price">Price per night</label>
-                    <input id="price" type='number' name='price' placeholder='120' required>
-                </div>
-
-                <div>
-                    <label for="duration">Stay Duration</label>
-                    <select id="duration" name='duration' required>
-                        <option value='1'>1 Night</option>
-                        <option value='2'>2 Nights</option>
-                        <option value='3'>3 Nights</option>
-                    </select>
-                </div>
-
-                <div style="grid-column: 1 / -1;" class="actions">
-                    <span class="muted-note">All fields required</span>
-                    <input class="btn" type="submit" value="Add Home">
-                </div>
-            </form>
-        </div>
+    <main>
+        <form action='/host/add-home' method='POST' class="row" novalidate>
+            <input id="title" type='text' name='title' placeholder='Title' required>
+            <input id="description" type='text' name='description' placeholder='Description' required>
+            <input id="price" type='number' name='price' placeholder='Price' required>
+            <input class="btn" type="submit" value="Add Home">
+        </form><br>
     </main>
-    <footer class="site-footer">
+    <footer>
         <a href="/">Go to Home</a>
     </footer>
 </body>
+
 </html>
