@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include('partials/head') %>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Home</title>
-        <link rel="stylesheet" href="/output.css">
 
 </head>
 
@@ -27,6 +21,9 @@
 
             <input id="price" type="number" name="price" placeholder="Price Per Night" required
                    class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-300 focus:border-red-400 transition-all duration-200">
+
+            <input id="imgUrl" type="text" name="imageUrl" placeholder="Image URL" required
+                   class="block w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-300 focus:border-red-400 transition-all duration-200">          
 
             <input type="submit" value="Add Home"
                    class="w-full bg-red-600 text-white font-semibold px-5 py-3 rounded-lg shadow-md hover:bg-red-700 hover:shadow-lg cursor-pointer transition-all duration-300 transform hover:-translate-y-0.5">
