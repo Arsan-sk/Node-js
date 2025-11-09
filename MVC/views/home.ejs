@@ -1,0 +1,51 @@
+<%- include('partials/head') %>
+<body class="min-h-screen bg-gradient-to-b from-red-50 to-gray-50 flex flex-col">
+    <header class="bg-red-600 text-white shadow-lg px-6 py-4">
+        <h1 class="text-4xl font-extrabold text-center tracking-tight drop-shadow-sm">Welcome to AirBnB</h1>
+    </header>
+
+    <main class="flex-1 flex items-center justify-center p-8">
+        <a href="/host/add-home"
+           class="inline-block bg-white text-red-600 font-semibold px-8 py-4 rounded-xl shadow-md border border-red-500 hover:bg-red-600 hover:text-white hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+           Add your home
+        </a>
+    </main>
+
+    <section class="max-w-6xl mx-auto p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Registered Homes</h2>
+        <p class="text-gray-600 mb-6">Browse recently added homes. Hover any card to preview.</p>
+
+        <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-20">
+            <% registeredHomes.forEach(home => { %>
+                <li class="h-full">
+                    <article class="bg-white rounded-lg shadow-sm border  border-gray-200 overflow-hidden h-full flex flex-col hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200">
+                        <figure class="overflow-hidden rounded-t-lg">
+                            <% if (home.imageUrl) { %>
+                                <img src="<%= home.imageUrl %>" alt="Image of <%= home.title %>" class="w-full rounded-lg h-48 object-cover border-b border-gray-200 transition-transform duration-300 ease-in-out hover:scale-105">
+                            <% } else { %>
+                                <div class="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7M8 7V5a4 4 0 0 1 8 0v2" />
+                                    </svg> 
+                                </div>
+                            <% } %>
+                        </figure>
+                        <div class="p-4 flex-1 flex flex-col">
+                            <h3 class="text-lg font-semibold text-gray-900 truncate"><%= home.title %></h3>
+                            <p class="mt-2 text-sm text-gray-600 flex-1 overflow-hidden"><%= home.description %></p>
+                            <div class="mt-4 flex items-center justify-between mb-4">
+                                <span class="text-red-600 font-bold">$<%= home.price %>/night</span>
+                            </div>
+                        </div>
+                    </article>
+                </li>
+            <% }) %>
+        </ul>
+    </section>
+
+    <footer class="text-center py-5 text-sm text-gray-600 border-t border-gray-200 bg-white/60 backdrop-blur-sm">
+        Made with <span class="font-semibold text-red-600">TailwindCSS</span>
+    </footer>
+</body>
+
+</html>
